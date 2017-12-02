@@ -74,7 +74,7 @@ Apply access control checking.
 - `req` The corresponding request.
 - `res` The corresponding response.
 
-Returns `true` if access control checking succeeded, `false` otherwise.
+Returns `true` if access control checking passed, `false` otherwise.
 
 This function extends legacy CORS Access Control Checking, it allows you 
 checking multiple origins in multiple forms. Possible hosts specification 
