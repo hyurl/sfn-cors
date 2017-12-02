@@ -67,9 +67,12 @@ doesn't rely on any framework.
 
 Apply access control checking.
 
-- `options` Could be an `*`, a `true` to accept all origins. Or set a hostname
-    to accept a specified origin. Or an object contains: 
-    `{ origins, methods, headers, credentials, maxAge, exposeHeaders }`.
+- `options` Could be an `*`, a `true` to accept all origins, a hostname to 
+    accept one origin, an array to accept several origins, or an object 
+    contains: 
+    `{ origins, methods, headers, credentials, maxAge, exposeHeaders }`,
+    except `credentials: boolean` and `maxAge: number`, the other four can be 
+    set to an `array`.
     See [https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) for more details.
 - `req` The corresponding request.
 - `res` The corresponding response.

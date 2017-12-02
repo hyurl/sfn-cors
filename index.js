@@ -25,15 +25,17 @@ const trimmer = require("string-trimmer");
  * (whatever succeeded or failed), the connection should be immediately 
  * terminated and no more actions will run after that.
  * 
- * @param {Any} options Could be an `*`, a `true` to accept all origins. Or
- *  set a hostname to accept a specified origin. Or an object contains:
+ * @param {Any} options Could be an `*`, a `true` to accept all origins, a 
+ *  hostname to accept one origin, an array to accept several origins, or an 
+ *  object contains: 
  *  `{ origins, methods, headers, credentials, maxAge, exposeHeaders }`.
  * @param {ClientRequest} req 
  * @param {ServerResponse} res 
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
  * @return {Boolean} `true` for pass, `false` otherwise.
  */
 function cors(options, req, res) {
-    if(!req.protocol){
+    if (!req.protocol) {
         req.protocol = url.parse(req.url).protocol;
     }
     var host = req.protocol + "://" + req.headers.host;
@@ -50,9 +52,9 @@ function cors(options, req, res) {
             exposeHeaders: null
         }, options);
 
-        if(!options.origins){ // No origins accepted, disable CORS.
+        if (!options.origins) { // No origins accepted, disable CORS.
             return false;
-        }else if (options.origins === "*" || options.origins === true) {
+        } else if (options.origins === "*" || options.origins === true) {
             options.origins = [req.headers.origin];
         } else if (typeof options.origins === "string") {
             options.origins = [options.origins];
@@ -139,9 +141,9 @@ cors.express = (options) => {
 /** Middleware for Koa framewaork. */
 cors.koa = (options) => {
     return (ctx, next) => {
-        if (cors(options, ctx.req, ctx.res) && ctx.method != "OPTIONS"){
+        if (cors(options, ctx.req, ctx.res) && ctx.method != "OPTIONS") {
             next();
-        }else{
+        } else {
             // Terminate the request. 
             ctx.status = 200;
             ctx.res.end();
@@ -191,7 +193,7 @@ function checkOrigin(origin, accepts) {
         } else {
             pass = host == origin.hostname;
         }
-        
+
     }
 
     return pass;
