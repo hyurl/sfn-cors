@@ -90,14 +90,14 @@ function cors(options, req, res) {
 
                 // check method
                 if (!options.methods.includes(reqMethod)) {
-                    res.setHeader("Access-Control-Allow-Origin", host);
+                    // res.setHeader("Access-Control-Allow-Origin", host);
                     return false;
                 }
 
                 // check headers
                 for (let header of reqHeaders) {
                     if (!options.headers.includes(header)) {
-                        res.setHeader("Access-Control-Allow-Origin", host);
+                        // res.setHeader("Access-Control-Allow-Origin", host);
                         return false;
                     }
                 }
@@ -117,7 +117,7 @@ function cors(options, req, res) {
             res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
         } else {
             // If origin isn't allowed, should fail the request immediately.
-            res.setHeader("Access-Control-Allow-Origin", host);
+            // res.setHeader("Access-Control-Allow-Origin", host);
             return false;
         }
     }
