@@ -38,7 +38,7 @@ app.listen(3000, ()=>{
 
 ```javascript
 const Koa = require("koa");
-const cors = require("./");
+const cors = require("sfn-cors");
 const app = new Koa();
 
 app.use(cors.koa({
