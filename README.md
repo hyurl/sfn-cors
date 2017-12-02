@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-npm install sfn-date --save
+npm install sfn-cors --save
 ```
 
 ## Example
