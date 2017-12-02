@@ -3,7 +3,7 @@ const cors = require("./");
 const app = new Koa();
 
 app.use(cors.koa({
-    origins: "*.google.com",
+    origins: "*.github.com",
     methods: "GET",
     headers: "x-requested-with",
 }));

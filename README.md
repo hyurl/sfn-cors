@@ -14,13 +14,13 @@ npm install sfn-cors --save
 const app = require("express")(); // Install express first.
 const cors = require("sfn-cors");
 
-// Try making a xhr request at 'google.com' to 'localhost:3000', set a custom
+// Try making a xhr request at 'github.com' to 'localhost:3000', set a custom
 // header 'X-Requested-With'.
-// The route accepts any kind of methods, but at `google.com`, only 'GET' will
+// The route accepts any kind of methods, but at `github.com`, only 'GET' will
 // be allowed.
 
 app.use("*", cors.express({
-    origins: "*.google.com",
+    origins: "*.github.com",
     methods: "GET",
     headers: "x-requested-with",
 }));
@@ -42,7 +42,7 @@ const cors = require("sfn-cors");
 const app = new Koa();
 
 app.use(cors.koa({
-    origins: "*.google.com",
+    origins: "*.github.com",
     methods: "GET",
     headers: "x-requested-with",
 }));
