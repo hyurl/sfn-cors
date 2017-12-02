@@ -1,0 +1,30 @@
+{
+    "name": "sfn-cors",
+    "version": "0.1.0",
+    "description": "Safe Featured Node.js CORS handler.",
+    "main": "index.js",
+    "scripts": {
+        "test": "node test"
+    },
+    "keywords": [
+        "sfn",
+        "cors"
+    ],
+    "author": {
+        "name": "Ayon Lee",
+        "email": "i@hyurl.com",
+        "url": "hyurl.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/hyurl/sfn-cors.git"
+    },
+    "bugs": {
+        "url": "https://github.com/Hyurl/sfn-cors/issues",
+        "email": "i@hyurl.com"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "string-trimmer": "^1.0.0"
+    }
+}
