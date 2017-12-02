@@ -1,6 +1,6 @@
 # SFN-CORS
 
-**Safe Featured Node.js CORS handler.**
+**Safe Featured Node.js CORS checking tool.**
 
 ## Install
 
