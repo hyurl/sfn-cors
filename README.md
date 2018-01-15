@@ -63,7 +63,7 @@ doesn't rely on any framework.
 
 ## API
 
-### `cors(options: Any, req: ClientRequest, res: ServerResponse): Boolean`
+### `cors(options: any, req: IncomingMessage, res: ServerResponse): boolean`
 
 Apply access control checking.
 
@@ -100,10 +100,10 @@ when Access Control Checking failed, or the request method is `OPTIONS`
 (whatever succeeded or failed), the connection should be immediately 
 terminated and no more actions will run after that.
 
-### `cors.express(options: Any)`
+### `cors.express(options: any)`
 
 Middleware for Express framework.
 
-### `cors.koa(options: Any)`
+### `cors.koa(options: any)`
 
 Middleware for Koa framework.
