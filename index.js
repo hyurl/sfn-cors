@@ -21,18 +21,18 @@ const trimmer = require("string-trimmer");
  * `Access-Control-Allow-Headers`, or check weakly, but using this module,
  * methods and headers are always strictly checked.
  * 
- * when Access Control Checking failed, or the request method is `OPTIONS` 
+ * When Access Control Checking failed, or the request method is `OPTIONS` 
  * (whatever succeeded or failed), the connection should be immediately 
  * terminated and no more actions will run after that.
  * 
- * @param {Any} options Could be an `*`, a `true` to accept all origins, a 
+ * @param {any} options Could be an `*`, `true` to accept all origins, a 
  *  hostname to accept one origin, an array to accept several origins, or an 
  *  object contains: 
  *  `{ origins, methods, headers, credentials, maxAge, exposeHeaders }`.
- * @param {ClientRequest} req 
+ * @param {IncomingMessage} req
  * @param {ServerResponse} res 
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
- * @return {Boolean} `true` for pass, `false` otherwise.
+ * @return {boolean} `true` for pass, `false` otherwise.
  */
 function cors(options, req, res) {
     if (!req.protocol) {
@@ -138,7 +138,7 @@ cors.express = (options) => {
     }
 }
 
-/** Middleware for Koa framewaork. */
+/** Middleware for Koa framework. */
 cors.koa = (options) => {
     return (ctx, next) => {
         if (cors(options, ctx.req, ctx.res) && ctx.method != "OPTIONS") {
