@@ -29,7 +29,7 @@ import { IncomingMessage, ServerResponse } from "http";
  *  contains: 
  *  `{ origins, methods, headers, credentials, maxAge, exposeHeaders }`.
  */
-declare function cors(options: true | string | string[] | {
+declare function cors(options: boolean | string | string[] | {
     origins: string[],
     methods?: string | string[],
     headers?: string | string[],
@@ -39,7 +39,7 @@ declare function cors(options: true | string | string[] | {
 }, req: IncomingMessage, res: ServerResponse): boolean;
 
 declare namespace cors {
-    function express(options: true | string | string[] | {
+    function express(options: boolean | string | string[] | {
         origins: string[],
         methods?: string | string[],
         headers?: string | string[],
@@ -48,7 +48,7 @@ declare namespace cors {
         exposeHeaders?: string | string[]
     }): (req: IncomingMessage, res: ServerResponse, next: Function) => void;
 
-    function koa(options: true | string | string[] | {
+    function koa(options: boolean | string | string[] | {
         origins: string[],
         methods?: string | string[],
         headers?: string | string[],
