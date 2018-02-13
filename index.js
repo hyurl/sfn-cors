@@ -36,13 +36,16 @@ const trimmer = require("string-trimmer");
  */
 function cors(options, req, res) {
     if (!req.protocol) {
-        req.protocol = url.parse(req.url).protocol;
+        req.protocol = req.socket.encrypted ? "https" : "http";
     }
-    var host = req.protocol + "://" + req.headers.host;
+
+    let host = req.protocol + "://" + req.headers.host;
+    
     if (req.headers.origin && req.headers.origin != host) { // Indicates CORS
         if (typeof options !== "object" || options instanceof Array) {
             options = { origins: options };
         }
+        
         options = Object.assign({
             origins: null,
             methods: null,
@@ -60,7 +63,7 @@ function cors(options, req, res) {
             options.origins = [options.origins];
         }
 
-        if (checkOrigin(req.headers.origin, options.origins)) {
+        if (checkOrigins(req.headers.origin, options.origins)) {
             if (req.method === "OPTIONS") {
                 var reqMethod = req.headers["access-control-request-method"],
                     reqHeaders = req.headers["access-control-request-headers"]
@@ -119,7 +122,6 @@ function cors(options, req, res) {
             res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
         } else {
             // If origin isn't allowed, should fail the request immediately.
-            // res.setHeader("Access-Control-Allow-Origin", host);
             return false;
         }
     }
@@ -151,7 +153,7 @@ cors.koa = (options) => {
     }
 }
 
-function checkOrigin(origin, accepts) {
+function checkOrigins(origin, accepts) {
     // get origin info
     origin = url.parse(origin);
     if (!origin.port) {
