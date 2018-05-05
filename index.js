@@ -61,12 +61,12 @@ function cors(options, req, res) {
                 res.setHeader("Access-Control-Allow-Headers", headers.join(", "));
 
                 // check method
-                if (!methods.includes(reqMethod))
+                if (methods.indexOf(reqMethod) === -1)
                     return false;
 
                 // check headers
                 for (var i in reqHeaders) {
-                    if (!headers.includes(reqHeaders[i]))
+                    if (headers.indexOf(reqHeaders[i]) === -1)
                         return false;
                 }
             } else {
