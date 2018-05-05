@@ -91,6 +91,7 @@ are:
 - `github.com:*` allow any port for this host
 - `*.github.com:*` allow any port for this host and any sub-domain
 - `https://*.github.com:*` same as above but restrict for https only
+- The port can be specified to an accurate port number.
 
 Some browsers, like Chrome, won't check `Access-Control-Allow-Methods` and 
 `Access-Control-Allow-Headers`, or check weakly, but using this module,

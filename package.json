@@ -1,8 +1,11 @@
 {
     "name": "sfn-cors",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "description": "Safe Featured Node.js CORS checking tool.",
     "main": "index.js",
+    "engines": {
+        "node": ">=4.0"
+    },
     "scripts": {
         "test": "node test"
     },
@@ -15,6 +18,7 @@
         "email": "i@hyurl.com",
         "url": "http://hyurl.com"
     },
+    "homepage": "https://github.com/hyurl/sfn-cors",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/hyurl/sfn-cors.git"
@@ -24,7 +28,9 @@
         "email": "i@hyurl.com"
     },
     "license": "MIT",
-    "dependencies": {
-        "string-trimmer": "^1.0.0"
+    "devDependencies": {
+        "axios": "^0.18.0",
+        "bluebird": "^3.5.1",
+        "mocha": "^5.1.1"
     }
 }

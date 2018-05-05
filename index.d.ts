@@ -15,6 +15,7 @@ import { IncomingMessage, ServerResponse } from "http";
  * - `github.com:*` allow any port for this host
  * - `*.github.com:*` allow any port for this host and any sub-domain
  * - `https://*.github.com:*` same as above but restrict for https only
+ * - The port can be specified to an accurate port number.
  *
  * Some browsers, like Chrome, won't check `Access-Control-Allow-Methods` and
  * `Access-Control-Allow-Headers`, or check weakly, but using this module,
@@ -24,38 +25,58 @@ import { IncomingMessage, ServerResponse } from "http";
  * (whatever succeeded or failed), the connection should be immediately
  * terminated and no more actions will run after that.
  * 
- * @param options Could be an `*`, `true` to accept all origins, a hostname 
- *  to accept one origin, an array to accept several origins, or an object 
- *  contains: 
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+ * @param allowAny Allow any origins, set `Access-Controll-Allow-Origin` to 
+ *  `*`.
+ */
+declare function cors(allowAny: boolean, req: IncomingMessage, res: ServerResponse): boolean;
+
+/**
+ * @param origin Allow the origin that fulfills host specs.
+ */
+declare function cors(origin: string, req: IncomingMessage, res: ServerResponse): boolean;
+
+/**
+ * @param origin Allow several origins that fulfills host specs.
+ */
+declare function cors(origins: string[], req: IncomingMessage, res: ServerResponse): boolean;
+
+/**
+ * @param options An object contains 
  *  `{ origins, methods, headers, credentials, maxAge, exposeHeaders }`.
  */
-declare function cors(options: boolean | string | string[] | {
-    origins: boolean | string | string[],
-    methods?: string | string[],
-    headers?: string | string[],
-    credentials?: boolean,
-    maxAge?: number,
-    exposeHeaders?: string | string[]
-}, req: IncomingMessage, res: ServerResponse): boolean;
+declare function cors(options: cors.CorsOption, req: IncomingMessage, res: ServerResponse): boolean;
 
 declare namespace cors {
-    export function express(options: boolean | string | string[] | {
+    export interface CorsOption {
+        /**
+         * Set `true` to accept all origins, `false` to reject all.
+         * Or set an origin or several origins that fulfills host specs.
+         * */
         origins: boolean | string | string[],
+        /** Sets `Access-Control-Allow-Methods`. */
         methods?: string | string[],
+        /** Sets `Access-Control-Allow-Headers`. */
         headers?: string | string[],
+        /** Sets `Access-Control-Allow-Credentials`. */
         credentials?: boolean,
+        /** Sets `Access-Control-Max-Age` in seconds. */
         maxAge?: number,
+        /** Sets `Access-Control-Expose-Headers`. */
         exposeHeaders?: string | string[]
-    }): (req: IncomingMessage, res: ServerResponse, next: Function) => void;
+    }
 
-    export function koa(options: boolean | string | string[] | {
-        origins: boolean | string | string[],
-        methods?: string | string[],
-        headers?: string | string[],
-        credentials?: boolean,
-        maxAge?: number,
-        exposeHeaders?: string | string[]
-    }): (ctx: any, next: Function) => void;
+    /** Middleware for Express framework. */
+    export function express(allowAny: boolean): (req: IncomingMessage, res: ServerResponse, next: Function) => void;
+    export function express(origin: string): (req: IncomingMessage, res: ServerResponse, next: Function) => void;
+    export function express(origins: string[]): (req: IncomingMessage, res: ServerResponse, next: Function) => void;
+    export function express(options: CorsOption): (req: IncomingMessage, res: ServerResponse, next: Function) => void;
+
+    /** Middleware for Koa framework. */
+    export function koa(allowAny: boolean): (ctx: any, next: Function) => void;
+    export function koa(origin: string): (ctx: any, next: Function) => void;
+    export function koa(origins: string[]): (ctx: any, next: Function) => void;
+    export function koa(options: CorsOption): (ctx: any, next: Function) => void;
 }
 
 export = cors;
