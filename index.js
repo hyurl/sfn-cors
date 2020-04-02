@@ -1,4 +1,6 @@
-var url = require("url");
+"use strict";
+
+const url = require("url");
 
 /** Apply access control checking. */
 function cors(options, req, res) {
@@ -6,11 +8,11 @@ function cors(options, req, res) {
         req.protocol = req.socket.encrypted ? "https" : "http";
     }
 
-    var host = req.protocol + "://" + req.headers.host,
-        isWildcard = false;
+    let host = req.protocol + "://" + req.headers.host;
+    let isWildcard = false;
 
     if (req.headers.origin && req.headers.origin != host) { // Indicates CORS
-        if (typeof options !== "object" || options instanceof Array) {
+        if (typeof options !== "object" || Array.isArray(options)) {
             options = { origins: options };
         }
 
@@ -26,7 +28,6 @@ function cors(options, req, res) {
         if (!options.origins) { // No origins accepted, disable CORS.
             return false;
         } else if (options.origins === "*" || options.origins === true) {
-            // options.origins = [req.headers.origin];
             isWildcard = true;
         } else if (typeof options.origins === "string") {
             options.origins = [options.origins];
@@ -34,14 +35,16 @@ function cors(options, req, res) {
 
         if (isWildcard || checkOrigins(req.headers.origin, options.origins)) {
             if (req.method === "OPTIONS") {
-                var methods = [],
-                    headers = [],
-                    reqMethod = req.headers["access-control-request-method"],
-                    reqHeaders = req.headers["access-control-request-headers"].split(/,\s*/);
+                let methods = [];
+                let headers = [];
+                let reqMethod = req.headers["access-control-request-method"];
+                let reqHeaders = req.headers["access-control-request-headers"]
+                    ? String(req.headers["access-control-request-headers"]).split(/,\s*/)
+                    : [];
 
                 // get accepted method
                 if (!options.methods) {
-                    methods = [reqMethod];
+                    methods = reqMethod ? [reqMethod] : [];
                 } else if (typeof options.methods === "string") {
                     methods = options.methods.split(/,\s*/);
                 } else {
@@ -50,7 +53,7 @@ function cors(options, req, res) {
 
                 // get accepted headers
                 if (!options.headers) {
-                    headers = reqHeaders;
+                    headers = reqHeaders || [];
                 } else if (typeof options.headers === "string") {
                     headers = options.headers.split(/,\s*/);
                 } else {
@@ -65,8 +68,8 @@ function cors(options, req, res) {
                     return false;
 
                 // check headers
-                for (var i in reqHeaders) {
-                    if (headers.indexOf(reqHeaders[i]) === -1)
+                for (let header of reqHeaders) {
+                    if (headers.indexOf(header) === -1)
                         return false;
                 }
             } else {
@@ -77,7 +80,7 @@ function cors(options, req, res) {
                     res.setHeader("Access-Control-Max-Age", options.maxAge);
 
                 if (options.exposeHeaders) {
-                    var headers = options.exposeHeaders instanceof Array
+                    let headers = Array.isArray(options.exposeHeaders)
                         ? options.exposeHeaders.join(", ")
                         : options.exposeHeaders;
 
@@ -119,26 +122,32 @@ cors.koa = function (options) {
     }
 }
 
+/**
+ * @param {string} _origin 
+ * @param {string[]} accepts 
+ */
 function checkOrigins(origin, accepts) {
     // get origin info
-    origin = url.parse(origin);
-    if (!origin.port) {
-        if (origin.protocol === "http:")
-            origin.port = 80;
-        else if (origin.protocol === "https:")
-            origin.port = 443;
+    let _origin = url.parse(origin);
+
+    if (!_origin.port) {
+        if (_origin.protocol === "http:")
+            _origin.port = 80;
+        else if (_origin.protocol === "https:")
+            _origin.port = 443;
     }
 
-    var pass = true;
+    let pass = true;
 
-    for (var x in accepts) {
-        var host = accepts[x];
-
+    for (let host of accepts) {
         // check protocol
-        var i = host.indexOf("://");
+        let i = host.indexOf("://");
+
         if (i > 0) {
-            var protocol = host.substring(0, i + 1);
-            pass = protocol == origin.protocol;
+            let protocol = host.slice(0, i + 1);
+
+            pass = protocol == _origin.protocol;
+
             if (!pass)
                 continue;
             else
@@ -146,10 +155,13 @@ function checkOrigins(origin, accepts) {
         }
 
         // check port
-        var j = host.indexOf(":");
+        let j = host.indexOf(":");
+
         if (j > 0) {
-            var port = host.substring(j + 1);
-            pass = port == origin.port || port === "*";
+            let port = host.slice(j + 1);
+
+            pass = port == _origin.port || port === "*";
+
             if (!pass)
                 continue;
             else
@@ -158,14 +170,14 @@ function checkOrigins(origin, accepts) {
 
         // check hostname
         if (host[0] === "*" && host[1] === ".") { // *.hostname.com style
-            host = host.substring(2);
-            pass = origin.hostname.lastIndexOf(host) === (origin.hostname.length - host.length);
+            host = host.slice(2);
+            pass = _origin.hostname.lastIndexOf(host) === (_origin.hostname.length - host.length);
         } else {
-            pass = host == origin.hostname;
+            pass = host == _origin.hostname;
         }
 
-        if (pass) break;
-
+        if (pass)
+            break;
     }
 
     return pass;
